@@ -1,26 +1,39 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+
 import { addNewPost, removeNewPost } from "@/features";
 import { useAppDispatch } from "@/store";
-import { generatePost } from "@/utils";
+import { Post } from "@/types";
+import { NEW_POST_FADEOUT, NEW_POST_POOL } from "./constants";
 
-export function usePostsSubscription() {
+export function usePostsSubscription(posts: Post[]) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const fakePost = generatePost();
+      const post = posts[Math.floor(Math.random() * posts.length)];
 
       const scrollY = window.scrollY;
+      const isNearTop = scrollY < 200;
 
       const previousHeight = document.documentElement.scrollHeight;
 
-      dispatch(addNewPost(fakePost));
+      dispatch(addNewPost(post));
 
       requestAnimationFrame(() => {
-        const newHeight = document.documentElement.scrollHeight;
+        if (isNearTop) {
+          // Scroll up when user is at top to follow the feed
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
 
+          return;
+        }
+
+        // Preserve position when user is already scrolling
+        const newHeight = document.documentElement.scrollHeight;
         const diff = newHeight - previousHeight;
 
         window.scrollTo({
@@ -30,10 +43,10 @@ export function usePostsSubscription() {
       });
 
       setTimeout(() => {
-        dispatch(removeNewPost(fakePost.id));
-      }, 9000);
-    }, 7000);
+        dispatch(removeNewPost(post.id));
+      }, NEW_POST_FADEOUT);
+    }, NEW_POST_POOL);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [posts]);
 }

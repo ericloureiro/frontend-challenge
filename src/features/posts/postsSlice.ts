@@ -36,12 +36,6 @@ const postsSlice = createSlice({
     addNewPost: (state, action: PayloadAction<Post>) => {
       const post = action.payload;
 
-      const exists = state.allPosts.some(({ id }) => id === post.id);
-
-      if (exists) {
-        return;
-      }
-
       state.allPosts.unshift(post);
 
       state.newPostIds.push(post.id);

@@ -1,1 +1,0 @@
-export { generatePost } from "./generatePost";

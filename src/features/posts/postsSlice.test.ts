@@ -71,7 +71,7 @@ describe("postsSlice", () => {
         expect(newPostIds).toContain("1");
       });
 
-      test("should NOT add duplicate post", () => {
+      test("should add duplicate post - testing purpose for mocking new ws responses", () => {
         const existingPost = mockPost("1");
 
         const stateWithPosts = {
@@ -84,8 +84,8 @@ describe("postsSlice", () => {
           addNewPost(existingPost),
         );
 
-        expect(allPosts.length).toBe(1);
-        expect(newPostIds.length).toBe(0);
+        expect(allPosts.length).toBe(2);
+        expect(newPostIds.length).toBe(1);
       });
 
       test("should remove post from newPostIds", () => {

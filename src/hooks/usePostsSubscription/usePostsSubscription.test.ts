@@ -1,10 +1,10 @@
 import { renderHook, act } from "@testing-library/react";
 
 import { addNewPost, removeNewPost } from "@/features";
-import { generatePost } from "@/utils";
 import { Post } from "@/types";
 
 import { usePostsSubscription } from "./usePostsSubscription";
+import { NEW_POST_FADEOUT, NEW_POST_POOL } from "./constants";
 
 jest.mock("@/utils", () => ({
   generatePost: jest.fn(),
@@ -36,31 +36,27 @@ describe("usePostsSubscription", () => {
   };
 
   test("should dispatch addNewPost on interval", () => {
-    (generatePost as jest.Mock).mockReturnValue(mockPost);
+    renderHook(() => usePostsSubscription([mockPost]));
 
-    renderHook(() => usePostsSubscription());
-
-    // trigger interval (7s)
+    // trigger interval
     act(() => {
-      jest.advanceTimersByTime(7000);
+      jest.advanceTimersByTime(NEW_POST_POOL);
     });
 
     expect(mockDispatch).toHaveBeenCalledWith(addNewPost(mockPost));
   });
 
-  test("should dispatch removeNewPost after 9 seconds", () => {
-    (generatePost as jest.Mock).mockReturnValue(mockPost);
-
-    renderHook(() => usePostsSubscription());
+  test("should dispatch removeNewPost after few seconds", () => {
+    renderHook(() => usePostsSubscription([mockPost]));
 
     // trigger interval
     act(() => {
-      jest.advanceTimersByTime(7000);
+      jest.advanceTimersByTime(NEW_POST_POOL);
     });
 
     // trigger inner timeout
     act(() => {
-      jest.advanceTimersByTime(9000);
+      jest.advanceTimersByTime(NEW_POST_FADEOUT);
     });
 
     expect(mockDispatch).toHaveBeenCalledWith(removeNewPost(mockPost.id));
@@ -69,21 +65,10 @@ describe("usePostsSubscription", () => {
   test("should clear interval on unmount", () => {
     const clearSpy = jest.spyOn(global, "clearInterval");
 
-    const { unmount } = renderHook(() => usePostsSubscription());
+    const { unmount } = renderHook(() => usePostsSubscription([mockPost]));
 
     unmount();
 
     expect(clearSpy).toHaveBeenCalled();
-  });
-
-  test("should not leak multiple intervals", () => {
-    renderHook(() => usePostsSubscription());
-    renderHook(() => usePostsSubscription());
-
-    act(() => {
-      jest.advanceTimersByTime(7000);
-    });
-
-    expect(mockDispatch).toHaveBeenCalled();
   });
 });

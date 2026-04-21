@@ -12,11 +12,11 @@ import { INITIAL_PAGE } from "./constants";
 export default function FeedPage() {
   const dispatch = useAppDispatch();
 
-  usePostsSubscription();
-
   const { allPosts, newPostIds, feed } = useAppSelector((state) => state.posts);
 
   const { page, hasMore, loading, error, scrollPosition } = feed;
+
+  usePostsSubscription(allPosts);
 
   function handleScrollToTop() {
     window.scrollTo({
@@ -64,11 +64,15 @@ export default function FeedPage() {
 
   return (
     <div className="flex flex-col gap-4 items-center gap-4">
-      {allPosts.map((post) => (
+      {allPosts.map((post, index) => (
+        // Here the random is needed because the new posts subscriptions are mocks that duplicate
+        // existing posts, so the redirect to the post details works properly instead of showing wrong data
         <PostCard
-          key={post.id + post.body}
+          key={post.id + crypto.randomUUID()}
           post={post}
-          isNew={newPostIds.some((id) => id === post.id)}
+          isNew={
+            newPostIds.some((id) => id === post.id) && newPostIds.length > index
+          }
           onClick={handleCardClick}
         />
       ))}
