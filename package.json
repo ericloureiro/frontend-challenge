@@ -10,6 +10,9 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/react-fontawesome": "^3.3.1",
     "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.15.1",
     "husky": "^9.1.7",
