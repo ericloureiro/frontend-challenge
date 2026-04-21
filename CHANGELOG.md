@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.1 - 21/04/2026
+
+### Minor bug fixes
+
+- Fixed inifinite scroll not working as expected
+- Fixed content height being cropped on mobile
+
 ## 1.0.0 - 21/04/2026
 
 ### First release
