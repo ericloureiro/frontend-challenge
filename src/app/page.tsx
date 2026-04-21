@@ -72,7 +72,7 @@ export default function FeedPage() {
           onClick={handleCardClick}
         />
       ))}
-      <FloatingButton onClick={handleScrollToTop} count={newPostIds.length} />
+      <FloatingButton onClick={handleScrollToTop} />
       {loading.more && <Spinner />}
     </div>
   );

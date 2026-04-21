@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.1 - 21/04/2026
+
+- Removed misleading count on floating button
+- Fixed new posts scrolling the content on mobile
+
 ## 1.1.0 - 21/04/2026
 
 - Added `Vercel` analytics to the app

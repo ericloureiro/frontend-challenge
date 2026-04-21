@@ -12,7 +12,22 @@ export function usePostsSubscription() {
     const interval = setInterval(() => {
       const fakePost = generatePost();
 
+      const scrollY = window.scrollY;
+
+      const previousHeight = document.documentElement.scrollHeight;
+
       dispatch(addNewPost(fakePost));
+
+      requestAnimationFrame(() => {
+        const newHeight = document.documentElement.scrollHeight;
+
+        const diff = newHeight - previousHeight;
+
+        window.scrollTo({
+          top: scrollY + diff,
+          behavior: "auto",
+        });
+      });
 
       setTimeout(() => {
         dispatch(removeNewPost(fakePost.id));

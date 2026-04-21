@@ -1,4 +1,4 @@
 export type FloatingButtonProps = {
-  count: number;
+  count?: number;
   onClick: () => void;
 };

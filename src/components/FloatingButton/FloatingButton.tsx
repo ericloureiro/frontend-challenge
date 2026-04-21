@@ -3,7 +3,7 @@ import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 import { FloatingButtonProps } from "./types";
 
-export function FloatingButton({ count, onClick }: FloatingButtonProps) {
+export function FloatingButton({ count = 0, onClick }: FloatingButtonProps) {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <button
