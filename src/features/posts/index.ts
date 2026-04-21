@@ -1,1 +1,8 @@
-export { loadPosts, prependPost } from "./postsSlice";
+export {
+  addNewPost,
+  clearScrollPosition,
+  loadPostById,
+  loadPostsByPage,
+  removeNewPost,
+  setScrollPosition,
+} from "./postsSlice";

@@ -1,49 +1,111 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { fetchPosts } from "../../services/api";
+import { fetchPostDetails, fetchPostList } from "@/services/api";
+import { Post } from "@/types";
 import {
-  POSTS_ASYNC_THUNK_NAME,
-  POSTS_SLICE_INITIA_STATE,
+  POST_DETAILS_ASYNC_THUNK_NAME,
+  POST_LIST_ASYNC_THUNK_NAME,
+  POSTS_SLICE_INITIAL_STATE,
   POSTS_SLICE_NAME,
   REQUEST_ERROR_MESSAGE,
 } from "./constants";
-import { Post } from "../../types";
 
-export const loadPosts = createAsyncThunk(
-  POSTS_ASYNC_THUNK_NAME,
-  async function (page: number) {
-    return await fetchPosts(page);
+export const loadPostById = createAsyncThunk(
+  POST_DETAILS_ASYNC_THUNK_NAME,
+  async (id: string) => {
+    return await fetchPostDetails(id);
+  },
+);
+
+export const loadPostsByPage = createAsyncThunk(
+  POST_LIST_ASYNC_THUNK_NAME,
+  async (page: number) => {
+    return await fetchPostList(page);
   },
 );
 
 const postsSlice = createSlice({
   name: POSTS_SLICE_NAME,
-  initialState: POSTS_SLICE_INITIA_STATE,
+  initialState: POSTS_SLICE_INITIAL_STATE,
   reducers: {
-    prependPost: function (state, action: PayloadAction<Post>) {
-      state.items.unshift(action.payload);
+    setScrollPosition: (state, action: PayloadAction<number>) => {
+      state.feed.scrollPosition = action.payload;
+    },
+    clearScrollPosition: (state) => {
+      state.feed.scrollPosition = 0;
+    },
+    addNewPost: (state, action: PayloadAction<Post>) => {
+      const post = action.payload;
+
+      const exists = state.allPosts.some(({ id }) => id === post.id);
+
+      if (exists) {
+        return;
+      }
+
+      state.allPosts.unshift(post);
+
+      state.newPostIds.push(post.id);
+    },
+    removeNewPost: (state, action: PayloadAction<string>) => {
+      state.newPostIds = state.newPostIds.filter((id) => id !== action.payload);
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loadPosts.rejected, function (state) {
-        state.loading = false;
-        state.error = REQUEST_ERROR_MESSAGE;
+      .addCase(loadPostById.rejected, (state) => {
+        state.details.error = REQUEST_ERROR_MESSAGE;
+        state.details.loading = false;
       })
-      .addCase(loadPosts.pending, function (state) {
-        state.loading = true;
+      .addCase(loadPostById.pending, (state) => {
+        state.details.loading = true;
+      })
+      .addCase(loadPostById.fulfilled, (state, action: PayloadAction<Post>) => {
+        const post = action.payload;
+
+        state.postById[post.id] = post;
+
+        state.details.loading = false;
+        state.details.error = null;
+      })
+      .addCase(loadPostsByPage.rejected, (state) => {
+        state.feed.error = REQUEST_ERROR_MESSAGE;
+        state.feed.loading.initial = false;
+        state.feed.loading.more = false;
+      })
+      .addCase(loadPostsByPage.pending, (state) => {
+        if (state.allPosts.length === 0) {
+          state.feed.loading.initial = true;
+
+          return;
+        }
+
+        state.feed.loading.more = true;
       })
       .addCase(
-        loadPosts.fulfilled,
-        function (state, action: PayloadAction<Post[]>) {
-          state.loading = false;
-          state.error = "";
-          state.items.push(...action.payload);
-          state.page += 1;
+        loadPostsByPage.fulfilled,
+        (state, action: PayloadAction<Post[]>) => {
+          const existingIds = new Set(state.allPosts.map((p) => p.id));
+
+          const newPosts = action.payload.filter(
+            (post) => !existingIds.has(post.id),
+          );
+
+          state.allPosts.push(...newPosts);
+
+          state.feed.loading.initial = false;
+          state.feed.loading.more = false;
+          state.feed.error = null;
+          state.feed.page += 1;
         },
       );
   },
 });
 
-export const { prependPost } = postsSlice.actions;
+export const {
+  addNewPost,
+  clearScrollPosition,
+  removeNewPost,
+  setScrollPosition,
+} = postsSlice.actions;
 
 export default postsSlice.reducer;

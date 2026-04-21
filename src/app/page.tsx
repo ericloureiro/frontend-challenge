@@ -1,37 +1,78 @@
 "use client";
 
-import Image from "next/image";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect } from "react";
-import { loadPosts } from "../features";
 
-export default function Feed() {
+import { ErrorMessage, FloatingButton, PostCard, Spinner } from "@/components";
+import { INITIAL_PAGE } from "./constants";
+import { loadPostsByPage, setScrollPosition } from "@/features";
+import { useInfiniteScroll, usePostsSubscription } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/store";
+
+export default function FeedPage() {
   const dispatch = useAppDispatch();
-  const { items, page, loading, error } = useAppSelector(
-    (state) => state.posts,
-  );
 
-  useEffect(() => {
-    dispatch(loadPosts(1));
-  }, []);
+  usePostsSubscription();
 
-  // TODO: better UI handling
-  if (error) {
-    return <p>{error}</p>;
+  const { allPosts, newPostIds, feed } = useAppSelector((state) => state.posts);
+
+  const { page, hasMore, loading, error, scrollPosition } = feed;
+
+  function handleScrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }
 
-  if (loading) {
-    return <p>loading</p>;
+  // Save scroll position before redirecting the user
+  function handleCardClick() {
+    dispatch(setScrollPosition(window.scrollY));
+  }
+
+  // Restore scroll position
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollPosition);
+    });
+  }, [scrollPosition]);
+
+  // Initial fetch
+  useEffect(() => {
+    if (allPosts.length !== 0) {
+      return;
+    }
+
+    dispatch(loadPostsByPage(INITIAL_PAGE));
+  }, [allPosts, dispatch]);
+
+  // Load more fetch
+  useInfiniteScroll(
+    () => {
+      dispatch(loadPostsByPage(page));
+    },
+    loading.initial || loading.more || !hasMore,
+  );
+
+  if (error) {
+    return <ErrorMessage message={error} />;
+  }
+
+  if (loading.initial) {
+    return <Spinner />;
   }
 
   return (
-    <div>
-      {items.map((post) => (
-        <div key={post.id}>
-          <h1>{post.title}</h1>
-          <h2>{post.body}</h2>
-        </div>
+    <div className="flex flex-col gap-4 items-center gap-4">
+      {allPosts.map((post) => (
+        <PostCard
+          key={post.id}
+          post={post}
+          isNew={newPostIds.some((id) => id === post.id)}
+          onClick={handleCardClick}
+        />
       ))}
+      <FloatingButton onClick={handleScrollToTop} count={newPostIds.length} />
+      {loading.more && <Spinner />}
     </div>
   );
 }

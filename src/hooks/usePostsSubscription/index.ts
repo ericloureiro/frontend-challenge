@@ -1,0 +1,1 @@
+export { usePostsSubscription } from "./usePostsSubscription";

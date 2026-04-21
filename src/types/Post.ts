@@ -1,7 +1,7 @@
 import { Reactions } from "./Reactions";
 
 export type Post = {
-  id: number;
+  id: string;
   title: string;
   body: string;
   tags: string[];
