@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.3 - 21/04/2026
+
+- Increment post pool and fadeout to make it more visible
+
 ## 1.1.2 - 21/04/2026
 
 - Fixed post mocks to prevent mismatching information between feed and details and allow duplicated posts to use subscription mock properly
@@ -17,14 +21,10 @@ All notable changes to this project will be documented in this file.
 
 ## 1.0.1 - 21/04/2026
 
-### Minor bug fixes
-
 - Fixed inifinite scroll not working as expected
 - Fixed content height being cropped on mobile
 
 ## 1.0.0 - 21/04/2026
-
-### First release
 
 - Added "Posts Feed" and "Post Details" screens
 - Added "Header" with clickable logo that redirects to "Home"
