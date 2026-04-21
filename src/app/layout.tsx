@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body className="h-screen flex flex-col">
+      <body className="h-[100dvh] flex flex-col">
         <Header />
-        <main className="h-full flex flex-1 justify-center p-8">
+        <main className="flex flex-1 justify-center items-center p-8">
           <ReduxProvider>{children}</ReduxProvider>
         </main>
       </body>
