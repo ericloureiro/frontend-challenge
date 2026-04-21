@@ -10,8 +10,6 @@ export function useInfiniteScroll(callback: () => void, skip: boolean) {
         return;
       }
 
-      locked.current = true;
-
       const { innerHeight, scrollY } = window;
       const { scrollHeight } = document.documentElement;
 
@@ -21,11 +19,13 @@ export function useInfiniteScroll(callback: () => void, skip: boolean) {
         return;
       }
 
+      locked.current = true;
+
       callback();
 
       setTimeout(() => {
         locked.current = false;
-      }, 300);
+      }, 1000);
     }
 
     window.addEventListener("scroll", handleScroll);
