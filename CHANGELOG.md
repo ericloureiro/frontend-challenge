@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.0 - 21/04/2026
+
+- Added `Vercel` analytics to the app
+
 ## 1.0.1 - 21/04/2026
 
 ### Minor bug fixes
