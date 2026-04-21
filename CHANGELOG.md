@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.2 - 21/04/2026
+
+- Fixed post mocks to prevent mismatching information between feed and details and allow duplicated posts to use subscription mock properly
+
 ## 1.1.1 - 21/04/2026
 
 - Removed misleading count on floating button
