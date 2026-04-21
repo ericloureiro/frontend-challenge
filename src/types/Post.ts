@@ -1,7 +1,11 @@
-import { Author } from "./Author";
+import { Reactions } from "./Reactions";
 
 export type Post = {
   id: number;
+  title: string;
   body: string;
-  author: Author;
+  tags: string[];
+  reactions: Reactions;
+  views: number;
+  userId: number;
 };
