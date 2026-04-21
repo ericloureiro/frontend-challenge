@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.4 - 21/04/2026
+
+- Fix header positioning to fixed at top
+
 ## 1.1.3 - 21/04/2026
 
 - Increment post pool and fadeout to make it more visible

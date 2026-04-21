@@ -15,7 +15,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en">
       <body className="h-[100dvh] flex flex-col">
         <Header />
-        <main className="flex flex-1 justify-center items-center p-8">
+        <main className="flex flex-1 justify-center items-center mt-[60px] p-8">
           <ReduxProvider>{children}</ReduxProvider>
         </main>
         <Analytics />
