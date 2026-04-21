@@ -3,10 +3,11 @@
 import { useEffect } from "react";
 
 import { ErrorMessage, FloatingButton, PostCard, Spinner } from "@/components";
-import { INITIAL_PAGE } from "./constants";
 import { loadPostsByPage, setScrollPosition } from "@/features";
 import { useInfiniteScroll, usePostsSubscription } from "@/hooks";
 import { useAppDispatch, useAppSelector } from "@/store";
+
+import { INITIAL_PAGE } from "./constants";
 
 export default function FeedPage() {
   const dispatch = useAppDispatch();
@@ -57,7 +58,7 @@ export default function FeedPage() {
     return <ErrorMessage message={error} />;
   }
 
-  if (loading.initial) {
+  if (loading.initial || allPosts.length === 0) {
     return <Spinner />;
   }
 
