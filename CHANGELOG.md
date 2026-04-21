@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.6 - 21/04/2026
+
+- Fix `PostCard` text spacing
+
 ## 1.1.5 - 21/04/2026
 
 - Fix flickering when adding a new item to the post list

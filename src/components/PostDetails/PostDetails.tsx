@@ -33,7 +33,7 @@ export function PostDetails({ post, isNew, isPreview }: PostDetailsProps) {
 
       <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
 
-      <p className={`text-sm text-gray-300 mb-3 text-pretty`}>{description}</p>
+      <p className="text-sm text-gray-300 mb-3">{description}</p>
 
       <div className="flex flex-wrap gap-2 mb-3">
         {tags.map((tag) => (
