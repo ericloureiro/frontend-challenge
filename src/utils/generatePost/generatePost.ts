@@ -12,8 +12,11 @@ function randomTags() {
 }
 
 export function generatePost(): Post {
+  // Max number of ids available to show avatar in dummy endpoint
+  const id = String(Math.floor(Math.random() * 70));
+
   return {
-    id: Date.now().toString(),
+    id,
     title: randomFrom(TITLE_LIST),
     body: randomFrom(DESCRIPTION_LIST),
     tags: randomTags(),

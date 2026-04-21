@@ -66,7 +66,7 @@ export default function FeedPage() {
     <div className="flex flex-col gap-4 items-center gap-4">
       {allPosts.map((post) => (
         <PostCard
-          key={post.id}
+          key={post.id + post.body}
           post={post}
           isNew={newPostIds.some((id) => id === post.id)}
           onClick={handleCardClick}
