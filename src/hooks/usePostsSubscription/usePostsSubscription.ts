@@ -12,6 +12,10 @@ export function usePostsSubscription(posts: Post[]) {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      if (posts.length === 0) {
+        return;
+      }
+
       const post = posts[Math.floor(Math.random() * posts.length)];
 
       const scrollY = window.scrollY;
