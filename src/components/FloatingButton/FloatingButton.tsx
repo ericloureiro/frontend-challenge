@@ -9,7 +9,7 @@ export function FloatingButton({ count, onClick }: FloatingButtonProps) {
       <button
         onClick={onClick}
         className="cursor-pointer relative flex items-center justify-center w-14 h-14 rounded-full
-          border border-orange-500 text-orange-400 text-xl shadow-lg shadow-black/40
+          border border-orange-500 text-orange-400 text-xl shadow-lg shadow-black/40 bg-neutral-950
           hover:bg-orange-500/10 hover:scale-105 active:scale-95 transition-all duration-200"
       >
         <FontAwesomeIcon size="1x" icon={faArrowUp} />
