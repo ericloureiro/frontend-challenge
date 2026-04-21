@@ -20,7 +20,8 @@ const mockPost = (id: string): Post => ({
   tags: [],
   reactions: { likes: 0, dislikes: 0 },
   views: 0,
-  userId: 1,
+  userId: "1",
+  internalId: id + "1",
 });
 
 describe("postsSlice", () => {
@@ -64,11 +65,13 @@ describe("postsSlice", () => {
       });
 
       test("should add post id to newPostIds", () => {
+        jest.spyOn(Math, "floor").mockReturnValue(1);
+
         const newPost = mockPost("1");
 
         const { newPostIds } = reducer(initialState, addNewPost(newPost));
 
-        expect(newPostIds).toContain("1");
+        expect(newPostIds).toContain("11");
       });
 
       test("should add duplicate post - testing purpose for mocking new ws responses", () => {
@@ -91,12 +94,13 @@ describe("postsSlice", () => {
       test("should remove post from newPostIds", () => {
         const stateWithIds = {
           ...initialState,
-          newPostIds: ["1", "2", "3"],
+          allPosts: [mockPost("2")],
+          newPostIds: ["11", "21", "31"],
         };
 
         const { newPostIds } = reducer(stateWithIds, removeNewPost("2"));
 
-        expect(newPostIds).toEqual(["1", "3"]);
+        expect(newPostIds).toEqual(["11", "31"]);
       });
     });
   });

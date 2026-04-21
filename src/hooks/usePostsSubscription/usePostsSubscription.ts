@@ -16,6 +16,8 @@ export function usePostsSubscription(posts: Post[]) {
         return;
       }
 
+      // Get a existing post to duplicate.
+      // That way the title, description and details matches the original post when seeing the details
       const post = posts[Math.floor(Math.random() * posts.length)];
 
       const scrollY = window.scrollY;

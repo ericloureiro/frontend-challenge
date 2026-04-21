@@ -65,13 +65,12 @@ export default function FeedPage() {
   return (
     <div className="flex flex-col gap-4 items-center gap-4">
       {allPosts.map((post, index) => (
-        // Here the random is needed because the new posts subscriptions are mocks that duplicate
-        // existing posts, so the redirect to the post details works properly instead of showing wrong data
         <PostCard
-          key={post.id + crypto.randomUUID()}
+          key={post.internalId}
           post={post}
           isNew={
-            newPostIds.some((id) => id === post.id) && newPostIds.length > index
+            newPostIds.some((id) => id === post.internalId) &&
+            newPostIds.length > index
           }
           onClick={handleCardClick}
         />

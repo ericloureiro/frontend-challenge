@@ -36,12 +36,21 @@ const postsSlice = createSlice({
     addNewPost: (state, action: PayloadAction<Post>) => {
       const post = action.payload;
 
-      state.allPosts.unshift(post);
+      // Key is a combination between id and userId in real data to have unique ids in the list
+      // Mocks have the same post id with a random number to prevent repeated keys, but preserving the
+      // original information to allow the details fetch response to match the list one
+      const internalId = post.id + String(Math.floor(Math.random() * 1000));
 
-      state.newPostIds.push(post.id);
+      state.allPosts.unshift({ ...post, internalId });
+
+      state.newPostIds.push(internalId);
     },
     removeNewPost: (state, action: PayloadAction<string>) => {
-      state.newPostIds = state.newPostIds.filter((id) => id !== action.payload);
+      const post = state.allPosts.find(({ id }) => action.payload === id);
+
+      state.newPostIds = state.newPostIds.filter(
+        (id) => id !== post?.internalId,
+      );
     },
   },
   extraReducers: (builder) => {
@@ -80,9 +89,12 @@ const postsSlice = createSlice({
         (state, action: PayloadAction<Post[]>) => {
           const existingIds = new Set(state.allPosts.map((p) => p.id));
 
-          const newPosts = action.payload.filter(
-            (post) => !existingIds.has(post.id),
-          );
+          const newPosts = action.payload
+            .filter((post) => !existingIds.has(post.id))
+            .map((post) => ({
+              ...post,
+              internalId: String(post.id) + String(post.userId),
+            }));
 
           state.allPosts.push(...newPosts);
 

@@ -31,7 +31,8 @@ describe("usePostsSubscription", () => {
     body: "",
     reactions: { dislikes: 0, likes: 0 },
     tags: [],
-    userId: 1,
+    userId: "1",
+    internalId: "11",
     views: 0,
   };
 

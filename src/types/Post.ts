@@ -7,5 +7,6 @@ export type Post = {
   tags: string[];
   reactions: Reactions;
   views: number;
-  userId: number;
+  userId: string;
+  internalId: string;
 };
